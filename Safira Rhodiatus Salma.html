@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Peta Lokasi Krakatau</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#eef7fb;
+}
+
+h2{
+text-align:center;
+color:#b30000;
+}
+
+#map{
+height:550px;
+width:90%;
+margin:auto;
+border-radius:12px;
+box-shadow:0 0 12px rgba(0,0,0,0.3);
+}
+
+.location-icon{
+color:red;
+font-size:28px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>Peta Lokasi Gunung Krakatau</h2>
+
+<div id="map"></div>
+
+<script>
+
+// koordinat Krakatau
+var lat = -6.149563;
+var lon = 105.441759;
+
+// membuat peta
+var map = L.map('map').setView([lat, lon], 10);
+
+// basemap OpenStreetMap
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+maxZoom:19,
+attribution:'© OpenStreetMap'
+}).addTo(map);
+
+
+// ikon location-dot
+var locationIcon = L.divIcon({
+html:'<i class="fa-solid fa-location-dot location-icon"></i>',
+iconSize:[30,30],
+className:''
+});
+
+
+// marker lokasi
+var marker = L.marker([lat, lon], {icon: locationIcon}).addTo(map);
+
+marker.bindPopup(
+"<b>Gunung Krakatau</b><br>" +
+"Koordinat:<br>" +
+"-6.149563 , 105.441759"
+).openPopup();
+
+
+// circle area vulkanik
+var circle = L.circle([lat, lon],{
+
+color:'red',
+fillColor:'#ff6666',
+fillOpacity:0.4,
+radius:2000
+
+}).addTo(map);
+
+circle.bindPopup("Zona Vulkanik Krakatau");
+
+
+// polygon area sekitar
+var polygon = L.polygon([
+[-6.16,105.43],
+[-6.13,105.42],
+[-6.12,105.46],
+[-6.15,105.47]
+
+],{
+
+color:'orange',
+fillColor:'#ffa500',
+fillOpacity:0.4
+
+}).addTo(map);
+
+polygon.bindPopup("Wilayah Kepulauan Krakatau");
+
+
+// popup klik peta
+var popup = L.popup();
+
+function onMapClick(e){
+
+popup
+.setLatLng(e.latlng)
+.setContent("Koordinat: " + e.latlng.toString())
+.openOn(map);
+
+}
+
+map.on('click', onMapClick);
+
+</script>
+
+</body>
+</html>
